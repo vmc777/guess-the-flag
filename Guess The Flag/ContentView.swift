@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
+  @State private var answeredEight = false
+  @State private var totalQuestionsAsked = 0
+  @State private var numberCorrect = 0
   @State private var showingScore = false
   @State private var scoreTitle = ""
   @State private var countries = ["France", "Germany", "Estonia", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"] // .shuffled()
@@ -16,11 +19,6 @@ struct ContentView: View {
 
   var body: some View {
     ZStack {
-//      RadialGradient(stops: [
-//        .init(color: Color(red: 0.1, green: 0.2, blue: 0.45), location: 0.3),
-//        .init(color: Color(red: 0.76, green: 0.15, blue: 0.26), location: 0.3),
-//      ], center: .top, startRadius: 200, endRadius: 400)
-//        .ignoresSafeArea()
       LinearGradient(gradient: Gradient(colors: [.blue, .white]), startPoint: .top, endPoint: .bottom)
         .ignoresSafeArea()
       VStack {
@@ -30,7 +28,6 @@ struct ContentView: View {
           .foregroundColor(.white)
         guessBox()
         Spacer()
-//        Spacer()
         Text("Score: \(newScore)")
           .foregroundColor(.blue)
           .font(.title.bold())
@@ -43,6 +40,11 @@ struct ContentView: View {
     } message: {
       Text("Your score is \(newScore)")
     }
+    .alert(scoreTitle, isPresented: $answeredEight) {
+      Button("Play Again", action: startOver)
+    } message: {
+      Text("Your end score is \(newScore). You got \(numberCorrect) out of 8 questions correct. See if you can beat that next time.")
+    }
   }
 
   func guessBox() -> some View {
@@ -54,7 +56,6 @@ struct ContentView: View {
 
         Text(countries[correctAnswer])
           .font(.largeTitle.weight(.semibold))
-//              .foregroundColor(.black )
       }
       ForEach(0 ..< 3) { number in
         Button {
@@ -74,16 +75,30 @@ struct ContentView: View {
 
   func flagTapped(_ number: Int) {
     if number == correctAnswer {
-      scoreTitle = "Correct. Go have an ice cream."
+      scoreTitle = "Correct!"
+      numberCorrect += 1
       newScore += 10
     } else {
-      scoreTitle = "Wrong! That was the flag for \(countries[number])"
+      scoreTitle = "Wrong. That was the flag for \(countries[number])"
       newScore -= 15
     }
-    showingScore = true
+    totalQuestionsAsked += 1
+    if totalQuestionsAsked == 8 {
+      answeredEight = true
+    } else {
+      showingScore = true
+    }
   }
 
   func askQuestion() {
+    countries.shuffle()
+    correctAnswer = Int.random(in: 0 ... 2)
+  }
+
+  func startOver() {
+    newScore = 0
+    totalQuestionsAsked = 0
+    numberCorrect = 0
     countries.shuffle()
     correctAnswer = Int.random(in: 0 ... 2)
   }
