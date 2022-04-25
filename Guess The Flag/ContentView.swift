@@ -7,14 +7,20 @@
 
 import SwiftUI
 
+let QUESTIONS_PER_ROUND = 8
+let CORRECT_GUESS_DELTA = 10
+let INCORRECT_GUESS_DELTA = -15
+let OPTIONS_PER_GUESS = 3
+
 struct ContentView: View {
-  @State private var answeredEight = false
-  @State private var totalQuestionsAsked = 0
+  @State private var roundComplete = false
+  @State private var questionsAskedThisRound = 0
   @State private var numberCorrect = 0
   @State private var showingScore = false
-  @State private var scoreTitle = ""
-  @State private var countries = ["France", "Germany", "Estonia", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"] // .shuffled()
-  @State private var correctAnswer = Int.random(in: 0 ... 2)
+  @State private var guessResult = ""
+  @State private var roundResults = ""
+  @State private var countries = ["France", "Germany", "Estonia", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"]  .shuffled()
+  @State private var correctAnswer = Int.random(in: 0 ..< OPTIONS_PER_GUESS)
   @State private var newScore = 0
 
   var body: some View {
@@ -35,15 +41,15 @@ struct ContentView: View {
       }
       .padding()
     }
-    .alert(scoreTitle, isPresented: $showingScore) {
-      Button("Continue", action: askQuestion)
+    .alert(guessResult, isPresented: $showingScore) {
+      Button("Continue", action: checkForEndOfRound)
     } message: {
       Text("Your score is \(newScore)")
     }
-    .alert(scoreTitle, isPresented: $answeredEight) {
-      Button("Play Again", action: startOver)
+    .alert(roundResults, isPresented: $roundComplete) {
+      Button("Play Again", action: startNewRound)
     } message: {
-      Text("Your end score is \(newScore). You got \(numberCorrect) out of 8 questions correct. See if you can beat that next time.")
+      Text("See if you can beat that next time.")
     }
   }
 
@@ -75,32 +81,36 @@ struct ContentView: View {
 
   func flagTapped(_ number: Int) {
     if number == correctAnswer {
-      scoreTitle = "Correct!"
+      guessResult = "Correct!"
       numberCorrect += 1
-      newScore += 10
+      newScore += CORRECT_GUESS_DELTA
     } else {
-      scoreTitle = "Wrong. That was the flag for \(countries[number])"
-      newScore -= 15
+      guessResult = "Wrong. That was the flag for \(countries[number])"
+      newScore += INCORRECT_GUESS_DELTA
     }
-    totalQuestionsAsked += 1
-    if totalQuestionsAsked == 8 {
-      answeredEight = true
+    showingScore = true
+  }
+
+  func checkForEndOfRound() {
+    questionsAskedThisRound += 1
+    if questionsAskedThisRound == QUESTIONS_PER_ROUND {
+      roundComplete = true
+      roundResults = "Your end score is \(newScore). You got \(numberCorrect) out of 8 questions correct."
     } else {
-      showingScore = true
+      pickNewFlag()
     }
   }
 
-  func askQuestion() {
+  func pickNewFlag() {
     countries.shuffle()
-    correctAnswer = Int.random(in: 0 ... 2)
+    correctAnswer = Int.random(in: 0 ..< OPTIONS_PER_GUESS)
   }
 
-  func startOver() {
+  func startNewRound() {
+    pickNewFlag()
     newScore = 0
-    totalQuestionsAsked = 0
+    questionsAskedThisRound = 0
     numberCorrect = 0
-    countries.shuffle()
-    correctAnswer = Int.random(in: 0 ... 2)
   }
 }
 
