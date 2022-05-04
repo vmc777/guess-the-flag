@@ -33,8 +33,7 @@ struct ContentView: View {
         GuessBox(answer: answer)
         Spacer()
         Text("Score: \(newScore)")
-          .foregroundColor(.blue)
-          .font(.title.bold())
+          .scoreStyle()
         Spacer()
       }
       .padding()
@@ -120,6 +119,20 @@ struct FlagImage: View {
     Image(country)
       .renderingMode(.original)
       .shadow(radius: 5)
+  }
+}
+
+struct Score: ViewModifier {
+  func body(content: Content) -> some View {
+    content
+      .font(.largeTitle)
+      .foregroundColor(.blue)
+  }
+}
+
+extension View {
+  func scoreStyle() -> some View {
+    modifier(Score())
   }
 }
 
