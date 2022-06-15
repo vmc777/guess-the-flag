@@ -14,12 +14,16 @@ let OPTIONS_PER_GUESS = 3
 
 struct ContentView: View {
     @State private var roundComplete = false
-    @State private var questionsAskedThisRound = 0
+    @State private var questionNumber = 0
     @State private var numberCorrect = 0
     @State private var showingScore = false
     @State private var guessResult = ""
     @State private var roundResults = ""
     @State private var newScore = 0
+
+    @State private var countries = ["France", "Germany", "Estonia", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
+    @State private var correctAnswer = Int.random(in: 0 ..< OPTIONS_PER_GUESS)
+    @State private var tappedFlagIndex: Int? = nil
 
     var body: some View {
         ZStack {
@@ -30,7 +34,10 @@ struct ContentView: View {
                 Text("Guess the Flag")
                     .font(.largeTitle.weight(.bold))
                     .foregroundColor(.white)
-                GuessBox(answer: answer)
+                GuessBox(countries: countries,
+                         correctAnswer: correctAnswer,
+                         tappedFlagIndex: tappedFlagIndex,
+                         answer: answer)
                 Spacer()
                 Text("Score: \(newScore)")
                     .scoreStyle()
@@ -50,7 +57,9 @@ struct ContentView: View {
         }
     }
 
-    func answer(isCorrect: Bool, correctAnswer: String) {
+    func answer(tappedFlag: Int) {
+        tappedFlagIndex = tappedFlag
+        let isCorrect = tappedFlag == correctAnswer
         if isCorrect {
             guessResult = "Correct!"
             numberCorrect += 1
@@ -63,25 +72,34 @@ struct ContentView: View {
     }
 
     func checkForEndOfRound() {
-        questionsAskedThisRound += 1
-        if questionsAskedThisRound == QUESTIONS_PER_ROUND {
+        questionNumber += 1
+        if questionNumber == QUESTIONS_PER_ROUND {
             roundComplete = true
             roundResults = "Your end score is \(newScore). You got \(numberCorrect) out of 8 questions correct."
+        } else {
+            pickNewFlag()
         }
     }
 
     func startNewRound() {
         newScore = 0
-        questionsAskedThisRound = 0
+        questionNumber = 0
         numberCorrect = 0
+        pickNewFlag()
+    }
+
+    func pickNewFlag() {
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0 ..< OPTIONS_PER_GUESS)
+        tappedFlagIndex = nil
     }
 }
 
 struct GuessBox: View {
-    var answer: (Bool, String) -> ()
-    @State private var tappedFlagIndex: Int? = nil
-    @State private var countries = ["France", "Germany", "Estonia", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
-    @State private var correctAnswer = Int.random(in: 0 ..< OPTIONS_PER_GUESS)
+    var countries: [String]
+    var correctAnswer: Int
+    var tappedFlagIndex: Int?
+    var answer: (Int) -> ()
 
     var body: some View {
         VStack(spacing: 15) {
@@ -103,7 +121,7 @@ struct GuessBox: View {
                             .degrees(number == tappedFlagIndex ? 360 : 0),
                             axis: (x: 0, y: 1, z: 0))
                         .opacity(number == tappedFlagIndex || tappedFlagIndex == nil ? 1 : 0.25)
-                        .animation(.easeInOut(duration: 1), value: tappedFlagIndex)
+                        .animation(tappedFlagIndex == nil ? .none : .easeInOut(duration: 1), value: tappedFlagIndex)
                 }
             }
         }
@@ -114,10 +132,7 @@ struct GuessBox: View {
     }
 
     func flagTapped(_ number: Int) {
-        withAnimation(.easeInOut(duration: 1)) {
-            tappedFlagIndex = number
-        }
-        answer(number == correctAnswer, countries[correctAnswer])
+        answer(number)
     }
 }
 
