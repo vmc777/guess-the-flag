@@ -59,13 +59,12 @@ struct ContentView: View {
 
     func answer(tappedFlag: Int) {
         tappedFlagIndex = tappedFlag
-        let isCorrect = tappedFlag == correctAnswer
-        if isCorrect {
+        if tappedFlag == correctAnswer {
             guessResult = "Correct!"
             numberCorrect += 1
             newScore += CORRECT_GUESS_DELTA
         } else {
-            guessResult = "Wrong. That was the flag for \(correctAnswer)"
+            guessResult = "Wrong. That was the flag for \(countries[tappedFlag])"
             newScore += INCORRECT_GUESS_DELTA
         }
         showingScore = true
