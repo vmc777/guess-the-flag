@@ -27,7 +27,9 @@ struct ContentView: View {
 
   var body: some View {
     ZStack {
-      LinearGradient(gradient: Gradient(colors: [.blue, .white]), startPoint: .top, endPoint: .bottom)
+      LinearGradient(gradient: Gradient(colors: [.blue, .white]),
+                     startPoint: .top,
+                     endPoint: .bottom)
         .ignoresSafeArea()
       VStack {
         Spacer()
@@ -94,71 +96,10 @@ struct ContentView: View {
   }
 }
 
-struct GuessBox: View {
-  var countries: [String]
-  var correctAnswer: Int
-  var tappedFlagIndex: Int?
-  var answer: (Int) -> ()
 
-  var body: some View {
-    VStack(spacing: 15) {
-      VStack {
-        Text("Tap the flag of")
-          .font(.subheadline.weight(.heavy))
-          .foregroundStyle(.secondary)
 
-        Text(countries[correctAnswer])
-          .font(.largeTitle.weight(.semibold))
-      }
-      ForEach(0 ..< 3) { number in
-        Button {
-          flagTapped(number)
-        }
-          label: {
-            FlagImage(country: countries[number])
-              .rotation3DEffect(
-                .degrees(number == tappedFlagIndex ? 360 : 0),
-                axis: (x: 0, y: 1, z: 0))
-              .opacity(number == tappedFlagIndex || tappedFlagIndex == nil ? 1 : 0.25)
-              .animation(tappedFlagIndex == nil ? .none : .easeInOut(duration: 1), value: tappedFlagIndex)
-              .grayscale(number == tappedFlagIndex || tappedFlagIndex == nil ? 0.0 : 0.85)
-              .buttonStyle(<#T##S#>)
-          }
-      }
-    }
-    .frame(maxWidth: .infinity)
-    .padding(.vertical, 20)
-    .background(.regularMaterial)
-    .clipShape(RoundedRectangle(cornerRadius: 20))
-  }
 
-  func flagTapped(_ number: Int) {
-    answer(number)
-  }
-}
 
-struct FlagImage: View {
-  var country: String
-  var body: some View {
-    Image(country)
-      .renderingMode(.original)
-      .shadow(radius: 5)
-  }
-}
-
-struct Score: ViewModifier {
-  func body(content: Content) -> some View {
-    content
-      .font(.largeTitle)
-      .foregroundColor(.blue)
-  }
-}
-
-extension View {
-  func scoreStyle() -> some View {
-    modifier(Score())
-  }
-}
 
 //
 //

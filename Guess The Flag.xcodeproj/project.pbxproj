@@ -11,6 +11,9 @@
 		0192FB42280CB6A0001E6DC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0192FB41280CB6A0001E6DC5 /* ContentView.swift */; };
 		0192FB44280CB6A1001E6DC5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0192FB43280CB6A1001E6DC5 /* Assets.xcassets */; };
 		0192FB47280CB6A1001E6DC5 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0192FB46280CB6A1001E6DC5 /* Preview Assets.xcassets */; };
+		01ADC49C2860AF0C003F258B /* ScoreStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ADC49B2860AF0C003F258B /* ScoreStyle.swift */; };
+		01ADC49E2860AF4F003F258B /* FlagImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ADC49D2860AF4F003F258B /* FlagImage.swift */; };
+		01ADC4A02860AFA0003F258B /* GuessBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01ADC49F2860AFA0003F258B /* GuessBox.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		0192FB41280CB6A0001E6DC5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		0192FB43280CB6A1001E6DC5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0192FB46280CB6A1001E6DC5 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		01ADC49B2860AF0C003F258B /* ScoreStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreStyle.swift; sourceTree = "<group>"; };
+		01ADC49D2860AF4F003F258B /* FlagImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlagImage.swift; sourceTree = "<group>"; };
+		01ADC49F2860AFA0003F258B /* GuessBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GuessBox.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +59,9 @@
 			children = (
 				0192FB3F280CB6A0001E6DC5 /* Guess_The_FlagApp.swift */,
 				0192FB41280CB6A0001E6DC5 /* ContentView.swift */,
+				01ADC49F2860AFA0003F258B /* GuessBox.swift */,
+				01ADC49D2860AF4F003F258B /* FlagImage.swift */,
+				01ADC49B2860AF0C003F258B /* ScoreStyle.swift */,
 				0192FB43280CB6A1001E6DC5 /* Assets.xcassets */,
 				0192FB45280CB6A1001E6DC5 /* Preview Content */,
 			);
@@ -139,6 +148,9 @@
 			files = (
 				0192FB42280CB6A0001E6DC5 /* ContentView.swift in Sources */,
 				0192FB40280CB6A0001E6DC5 /* Guess_The_FlagApp.swift in Sources */,
+				01ADC4A02860AFA0003F258B /* GuessBox.swift in Sources */,
+				01ADC49C2860AF0C003F258B /* ScoreStyle.swift in Sources */,
+				01ADC49E2860AF4F003F258B /* FlagImage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
